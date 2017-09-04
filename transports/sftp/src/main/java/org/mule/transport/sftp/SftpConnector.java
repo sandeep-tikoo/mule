@@ -7,6 +7,9 @@
 package org.mule.transport.sftp;
 
 import static org.mule.transport.sftp.AuthenticationMethodValidator.validateAuthenticationMethods;
+import static java.lang.System.getProperty;
+import static org.mule.api.config.MuleProperties.MULE_REGISTER_SECURITY_PROVIDER_AS_DEFAULT;
+import static java.lang.Boolean.parseBoolean;
 
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
@@ -18,12 +21,12 @@ import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.transport.ConnectorException;
 import org.mule.api.transport.MessageReceiver;
 import org.mule.config.i18n.CoreMessages;
-import org.mule.transport.AbstractConnector;
 import org.mule.transport.file.ExpressionFilenameParser;
 import org.mule.transport.file.FilenameParser;
-import org.mule.transport.sftp.config.SftpProxyConfig;
 import org.mule.transport.nameable.AbstractInboundEndpointNameableConnector;
+import org.mule.transport.sftp.config.SftpProxyConfig;
 import org.mule.transport.sftp.notification.SftpNotifier;
+import org.mule.util.SecurityUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -127,7 +130,7 @@ public class SftpConnector extends AbstractInboundEndpointNameableConnector
 
     static
     {
-        String propValue = System.getProperty("mule.sftp.transport.maxConnectionPoolSize");
+        String propValue = getProperty("mule.sftp.transport.maxConnectionPoolSize");
         if (propValue != null)
         {
             logger.info("Will override the maxConnectionPoolSize to " + propValue
@@ -360,6 +363,14 @@ public class SftpConnector extends AbstractInboundEndpointNameableConnector
     @Override
     protected void doInitialise() throws InitialisationException
     {
+        String registerSecurityProviderAsDefaultValue = getProperty(MULE_REGISTER_SECURITY_PROVIDER_AS_DEFAULT, "false");
+        boolean registerSecurityProviderAsDefault = parseBoolean(registerSecurityProviderAsDefaultValue);
+        
+        if (registerSecurityProviderAsDefault)
+        {
+            SecurityUtils.registerMuleSecurityProviderAsDefault();
+        }
+
         if (filenameParser != null)
         {
             filenameParser.setMuleContext(muleContext);

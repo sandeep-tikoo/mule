@@ -9,6 +9,12 @@ package org.mule.transport.sftp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static java.lang.System.clearProperty;
+import static java.lang.System.setProperty;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mule.api.config.MuleProperties.MULE_REGISTER_SECURITY_PROVIDER_AS_DEFAULT;
+import static org.mule.api.config.MuleProperties.MULE_SECURITY_PROVIDER_PROPERTY;
 
 import org.mule.api.MuleException;
 import org.mule.api.endpoint.EndpointURI;
@@ -16,6 +22,8 @@ import org.mule.api.endpoint.ImmutableEndpoint;
 import org.mule.endpoint.MuleEndpointURI;
 import org.mule.tck.junit4.rule.DynamicPort;
 
+import java.security.Provider;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -28,17 +36,23 @@ public class SftpEndpointTestCase extends AbstractSftpTestCase
     @Rule
     public DynamicPort dynamicPort1 = new DynamicPort("SFTP_PORT");
 
-    public SftpEndpointTestCase(ConfigVariant variant, String configResources)
+    private boolean overrideDefaultSecurityProvider = false;
+    
+    public SftpEndpointTestCase(ConfigVariant variant, String configResources, boolean overrideDefaultSecurityProvider)
     {
         super(variant, configResources);
+        configureSecurityProvider(overrideDefaultSecurityProvider);        
     }
+
 
     @Parameters
     public static Collection<Object[]> parameters()
     {
         return Arrays.asList(new Object[][]{
-            {ConfigVariant.SERVICE, "mule-sftp-endpoint-config-service.xml"},
-            {ConfigVariant.FLOW, "mule-sftp-endpoint-config-flow.xml"}
+            {ConfigVariant.SERVICE, "mule-sftp-endpoint-config-service.xml", true},
+            {ConfigVariant.SERVICE, "mule-sftp-endpoint-config-service.xml", false},
+            {ConfigVariant.FLOW, "mule-sftp-endpoint-config-flow.xml", true},
+            {ConfigVariant.FLOW, "mule-sftp-endpoint-config-flow.xml", false}
         });
     }
 
@@ -100,5 +114,27 @@ public class SftpEndpointTestCase extends AbstractSftpTestCase
 
         assertTrue("'keepFileOnError' should be on by default", oUtil1.isKeepFileOnError());
         assertFalse("'keepFileOnError' should be false", oUtil2.isKeepFileOnError());
+    }
+    
+    @Test
+    public void testSecurityProvider()
+    {
+        Provider defaultProvider = Security.getProviders()[0];
+        assertThat(defaultProvider.getName().equals("BC"), equalTo(overrideDefaultSecurityProvider));
+    }
+    
+    private void configureSecurityProvider(boolean overrideDefaultSecurityProvider)
+    {
+        this.overrideDefaultSecurityProvider = overrideDefaultSecurityProvider;
+        if (overrideDefaultSecurityProvider)
+        {
+            setProperty(MULE_REGISTER_SECURITY_PROVIDER_AS_DEFAULT, "true");
+            setProperty(MULE_SECURITY_PROVIDER_PROPERTY, "org.bouncycastle.jce.provider.BouncyCastleProvider");
+        }
+        else
+        {
+            clearProperty(MULE_REGISTER_SECURITY_PROVIDER_AS_DEFAULT);
+            clearProperty(MULE_SECURITY_PROVIDER_PROPERTY);
+        }
     }
 }

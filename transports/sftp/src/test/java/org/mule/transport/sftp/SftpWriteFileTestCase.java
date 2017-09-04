@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mule.api.MuleMessage;
 import org.mule.api.client.MuleClient;
 
+@Para
 public class SftpWriteFileTestCase extends AbstractSftpFunctionalTestCase {
     
     @Override
