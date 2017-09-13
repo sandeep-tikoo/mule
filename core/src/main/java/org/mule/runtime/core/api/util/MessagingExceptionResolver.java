@@ -142,6 +142,7 @@ public class MessagingExceptionResolver {
     MessagingException updated =
         me instanceof FlowExecutionException ? new FlowExecutionException(errorEvent, me.getCause(), failingProcessor)
             : new MessagingException(me.getI18nMessage(), errorEvent, me.getCause(), failingProcessor);
+    updated.setHandled(me.handled());
     return enrich(updated, failingProcessor, errorEvent, context);
   }
 

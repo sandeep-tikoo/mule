@@ -182,10 +182,10 @@ abstract class AbstractMessageProcessorChain extends AbstractExecutableComponent
                            .then(Mono.empty()))
         .onErrorResume(MessagingException.class,
                        throwable -> {
-                         throwable = resolveMessagingException(processor).apply(throwable);
-                         return Mono.from(((BaseEventContext) event.getContext()).error(throwable)).then(Mono.empty());
+                         MessagingException throwable1 = resolveMessagingException(processor).apply(throwable);
+                         Mono returnValue = throwable1.handled() ? Mono.empty() : Mono.error(throwable1);
+                         return Mono.from(((BaseEventContext) event.getContext()).error(throwable)).then(returnValue);
                        })));
-
     return interceptors;
   }
 
