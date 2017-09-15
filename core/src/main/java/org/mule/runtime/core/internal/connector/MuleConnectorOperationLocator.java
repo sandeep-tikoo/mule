@@ -6,8 +6,6 @@
  */
 package org.mule.runtime.core.internal.connector;
 
-import static java.util.Collections.sort;
-
 import org.mule.runtime.core.api.MessageExchangePattern;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.api.exception.MuleException;
@@ -16,7 +14,6 @@ import org.mule.runtime.core.api.context.MuleContextAware;
 import org.mule.runtime.api.lifecycle.Initialisable;
 import org.mule.runtime.api.lifecycle.InitialisationException;
 import org.mule.runtime.core.api.processor.Processor;
-import org.mule.runtime.core.privileged.client.AbstractPriorizableConnectorMessageProcessorProvider;
 import org.mule.runtime.core.privileged.connector.ConnectorOperationLocator;
 import org.mule.runtime.core.privileged.connector.ConnectorOperationProvider;
 
@@ -38,18 +35,10 @@ public class MuleConnectorOperationLocator implements ConnectorOperationLocator,
   public void initialise() throws InitialisationException {
     final List<ConnectorOperationProvider> providers =
         new ArrayList<>(muleContext.getRegistry().lookupObjects(ConnectorOperationProvider.class));
-    sort(providers, (p1, p2) -> priority(p2) - priority(p1));
 
     this.connectorOperationProviders = providers;
   }
 
-  private int priority(ConnectorOperationProvider provider) {
-    if (provider instanceof AbstractPriorizableConnectorMessageProcessorProvider) {
-      return ((AbstractPriorizableConnectorMessageProcessorProvider) provider).priority();
-    } else {
-      return 0;
-    }
-  }
 
   @Override
   public void setMuleContext(MuleContext context) {

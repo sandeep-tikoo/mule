@@ -70,7 +70,6 @@ import org.mule.runtime.core.api.DefaultTransformationService;
 import org.mule.runtime.core.api.Injector;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.SingleResourceTransactionFactoryManager;
-import org.mule.runtime.core.api.client.MuleClient;
 import org.mule.runtime.core.api.config.MuleConfiguration;
 import org.mule.runtime.core.api.config.bootstrap.ArtifactType;
 import org.mule.runtime.core.api.config.bootstrap.BootstrapServiceDiscoverer;
@@ -192,8 +191,6 @@ public class DefaultMuleContext implements MuleContext {
   private Object streamCloserServiceLock = new Object();
 
   private ClassLoader executionClassLoader;
-
-  protected MuleClient localMuleClient;
 
   /**
    * Global exception handler which handles "system" exceptions (i.e., when no message is involved).
@@ -777,11 +774,6 @@ public class DefaultMuleContext implements MuleContext {
   }
 
   @Override
-  public MuleClient getClient() {
-    return localMuleClient;
-  }
-
-  @Override
   public void handleException(Exception e, RollbackSourceCallback rollbackMethod) {
     getExceptionListener().handleException(e, rollbackMethod);
   }
@@ -947,10 +939,6 @@ public class DefaultMuleContext implements MuleContext {
 
   public void setMuleRegistry(MuleRegistry muleRegistry) {
     this.muleRegistryHelper = muleRegistry;
-  }
-
-  public void setLocalMuleClient(MuleClient muleClient) {
-    this.localMuleClient = muleClient;
   }
 
   @Override

@@ -14,7 +14,6 @@ import org.mule.runtime.api.lock.LockFactory;
 import org.mule.runtime.api.message.Message;
 import org.mule.runtime.api.serialization.ObjectSerializer;
 import org.mule.runtime.api.store.ObjectStoreManager;
-import org.mule.runtime.core.api.client.MuleClient;
 import org.mule.runtime.core.api.config.MuleConfiguration;
 import org.mule.runtime.core.api.config.bootstrap.ArtifactType;
 import org.mule.runtime.core.api.config.bootstrap.BootstrapServiceDiscoverer;
@@ -203,8 +202,6 @@ public interface MuleContext extends Lifecycle {
    * @param command the command to run with the lock for this context's lifecycle taken.
    */
   void withLifecycleLock(Runnable command);
-
-  MuleClient getClient();
 
   SystemExceptionHandler getExceptionListener();
 
