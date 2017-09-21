@@ -139,8 +139,8 @@
 
     <operation name="do-login-and-plain-entire-stream-response-nesting-scopes-with-failures">
         <parameters>
-            <parameter name="someUser" type="string" defaultValue="usernameX"/>
-            <parameter name="somePass" type="string" defaultValue="passwordX"/>
+            <parameter name="someUserA" type="string" defaultValue="usernameX"/>
+            <parameter name="somePassA" type="string" defaultValue="passwordX"/>
         </parameters>
         <body>
             <mule:try>

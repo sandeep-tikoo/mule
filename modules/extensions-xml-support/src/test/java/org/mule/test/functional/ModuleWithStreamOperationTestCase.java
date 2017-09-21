@@ -13,7 +13,6 @@ import static org.mule.test.allure.AllureConstants.XmlSdk.Streaming.STREAMING;
 import static org.mule.test.allure.AllureConstants.XmlSdk.XML_SDK;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.runtime.core.api.event.BaseEvent;
 import org.mule.runtime.core.internal.processor.chain.ModuleOperationMessageProcessorChainBuilder;
@@ -78,7 +77,7 @@ public class ModuleWithStreamOperationTestCase extends AbstractModuleWithHttpTes
     assertThat(resultMap.get("route 2"), is("User and pass validated"));
   }
 
-  @Ignore("MULE-13586: seems that the MP is being called several times rather than just one. Also, the correct MP is not being executed in the on-error-continue")
+  //  @Ignore("MULE-13586: seems that the MP is being called several times rather than just one. Also, the correct MP is not being executed in the on-error-continue")
   @Test
   public void testHttpDoLoginAndPlainEntireStreamResponseNestingScopesWithFailures() throws Exception {
     assertFlow("testHttpDoLoginAndPlainEntireStreamResponseNestingScopesWithFailures", SUCCESS_RESPONSE);
