@@ -136,4 +136,25 @@
         </body>
         <output type="string"/>
     </operation>
+
+    <operation name="do-login-and-plain-entire-stream-response-nesting-scopes-with-failures">
+        <parameters>
+            <parameter name="someUser" type="string" defaultValue="usernameX"/>
+            <parameter name="somePass" type="string" defaultValue="passwordX"/>
+        </parameters>
+        <body>
+            <mule:try>
+                <!-- the following request will fail due to baisc authentication failure -->
+                <tns:do-login-and-leave-entire-stream-response someUser="nonExistingUser" somePass="nonExistingPass" />
+                <mule:set-payload value="it should have never reached here" />
+                <mule:error-handler>
+                    <mule:on-error-continue >
+                        <tns:do-login-and-leave-entire-stream-response someUser="#[parameters.someUser]" somePass="#[parameters.somePass]" />
+                        <mule:object-to-string-transformer />
+                    </mule:on-error-continue>
+                </mule:error-handler>
+            </mule:try>
+        </body>
+        <output type="string"/>
+    </operation>
 </module>

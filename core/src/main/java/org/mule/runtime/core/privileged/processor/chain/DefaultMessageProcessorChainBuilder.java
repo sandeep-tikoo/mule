@@ -19,20 +19,19 @@ import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.construct.FlowConstruct;
 import org.mule.runtime.core.api.event.BaseEvent;
 import org.mule.runtime.core.api.processor.InterceptingMessageProcessor;
-import org.mule.runtime.core.privileged.processor.MessageProcessorBuilder;
 import org.mule.runtime.core.api.processor.Processor;
 import org.mule.runtime.core.api.processor.strategy.ProcessingStrategy;
 import org.mule.runtime.core.internal.processor.ReferenceProcessor;
+import org.mule.runtime.core.privileged.processor.MessageProcessorBuilder;
+import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import org.reactivestreams.Publisher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -197,6 +196,8 @@ public class DefaultMessageProcessorChainBuilder extends AbstractMessageProcesso
       public void initialise() throws InitialisationException {
         chainBuilder.setProcessingStrategy(processingStrategySupplier.get());
         delegate = chainBuilder.build();
+        //TODO MULE-13586: doesn't seem that propagating the annotations fix the issue with the try and the MP that fails, leaving it here for you to remove it Feist.
+        delegate.setAnnotations(getAnnotations());
         initialiseIfNeeded(delegate, muleContext);
       }
 

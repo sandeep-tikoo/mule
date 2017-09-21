@@ -33,4 +33,8 @@
     <flow name="testHttpDoLoginAndPlainEntireStreamResponseNestingScopes">
         <module-using-streaming:do-login-and-plain-entire-stream-response-nesting-scopes config-ref="la-plata-config" someUser="userLP" somePass="passLP" />
     </flow>
+
+    <flow name="testHttpDoLoginAndPlainEntireStreamResponseNestingScopesWithFailures">
+        <module-using-streaming:do-login-and-plain-entire-stream-response-nesting-scopes-with-failures config-ref="la-plata-config" someUser="userLP" somePass="passLP" />
+    </flow>
 </mule>
