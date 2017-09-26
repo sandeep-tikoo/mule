@@ -125,10 +125,9 @@ public abstract class AbstractPipeline extends AbstractFlowConstruct implements 
    * Creates a {@link Processor} that will process messages from the configured {@link MessageSource} .
    * <p>
    * The default implementation of this methods uses a {@link DefaultMessageProcessorChainBuilder} and allows a chain of
-   * {@link Processor}s to be configured using the
-   * {@link #configureMessageProcessors(MessageProcessorChainBuilder)} method but if you wish
-   * to use another {@link MessageProcessorBuilder} or just a single {@link Processor} then this method can be overridden and
-   * return a single {@link Processor} instead.
+   * {@link Processor}s to be configured using the {@link #configureMessageProcessors(MessageProcessorChainBuilder)} method but if
+   * you wish to use another {@link MessageProcessorBuilder} or just a single {@link Processor} then this method can be overridden
+   * and return a single {@link Processor} instead.
    */
   protected MessageProcessorChain createPipeline() throws MuleException {
     DefaultMessageProcessorChainBuilder builder = new DefaultMessageProcessorChainBuilder();
@@ -397,7 +396,7 @@ public abstract class AbstractPipeline extends AbstractFlowConstruct implements 
                                                                                         AbstractPipeline.this))
 
           )
-          .doOnTerminate((result, throwable) -> ((BaseEventContext) event.getContext()).getProcessingTime()
+          .doOnTerminate(() -> ((BaseEventContext) event.getContext()).getProcessingTime()
               .ifPresent(time -> time.addFlowExecutionBranchTime(startTime)))
           .subscribe(requestUnbounded());
 

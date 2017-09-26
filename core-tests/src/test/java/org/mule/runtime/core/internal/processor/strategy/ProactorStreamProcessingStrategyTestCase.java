@@ -32,7 +32,7 @@ import static org.mule.runtime.core.internal.processor.strategy.AbstractStreamPr
 import static org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory.DEFAULT_WAIT_STRATEGY;
 import static org.mule.test.allure.AllureConstants.ProcessingStrategiesFeature.PROCESSING_STRATEGIES;
 import static org.mule.test.allure.AllureConstants.ProcessingStrategiesFeature.ProcessingStrategiesStory.PROACTOR;
-import static reactor.util.concurrent.QueueSupplier.XS_BUFFER_SIZE;
+import static reactor.util.concurrent.Queues.XS_BUFFER_SIZE;
 
 import org.mule.runtime.api.scheduler.Scheduler;
 import org.mule.runtime.api.exception.DefaultMuleException;
@@ -53,7 +53,6 @@ import org.junit.Test;
 
 @Feature(PROCESSING_STRATEGIES)
 @Story(PROACTOR)
-@Ignore("MULE-13478")
 public class ProactorStreamProcessingStrategyTestCase extends AbstractProcessingStrategyTestCase {
 
   public ProactorStreamProcessingStrategyTestCase(Mode mode) {

@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
-import reactor.core.Cancellation;
+import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -154,12 +154,12 @@ public class SimpleRetryPolicy implements RetryPolicy {
     private final Scheduler delegate = Schedulers.immediate();
 
     @Override
-    public Cancellation schedule(Runnable task) {
+    public Disposable schedule(Runnable task) {
       return delegate.schedule(task);
     }
 
     @Override
-    public Cancellation schedule(Runnable task, long delay, TimeUnit unit) {
+    public Disposable schedule(Runnable task, long delay, TimeUnit unit) {
       try {
         Thread.sleep(unit.toMillis(delay));
       } catch (InterruptedException e) {
@@ -169,7 +169,7 @@ public class SimpleRetryPolicy implements RetryPolicy {
     }
 
     @Override
-    public Cancellation schedulePeriodically(Runnable task, long initialDelay, long period, TimeUnit unit) {
+    public Disposable schedulePeriodically(Runnable task, long initialDelay, long period, TimeUnit unit) {
       return delegate.schedulePeriodically(task, initialDelay, period, unit);
     }
 
@@ -191,12 +191,6 @@ public class SimpleRetryPolicy implements RetryPolicy {
     @Override
     public void start() {
       delegate.start();
-    }
-
-    @Override
-    @Deprecated
-    public void shutdown() {
-      delegate.shutdown();
     }
 
     @Override

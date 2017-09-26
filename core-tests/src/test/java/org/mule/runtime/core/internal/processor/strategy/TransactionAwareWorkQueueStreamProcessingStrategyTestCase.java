@@ -16,7 +16,7 @@ import static org.mule.runtime.core.internal.processor.strategy.AbstractStreamPr
 import static org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory.DEFAULT_WAIT_STRATEGY;
 import static org.mule.test.allure.AllureConstants.ProcessingStrategiesFeature.PROCESSING_STRATEGIES;
 import static org.mule.test.allure.AllureConstants.ProcessingStrategiesFeature.ProcessingStrategiesStory.WORK_QUEUE;
-import static reactor.util.concurrent.QueueSupplier.XS_BUFFER_SIZE;
+import static reactor.util.concurrent.Queues.XS_BUFFER_SIZE;
 
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.processor.strategy.ProcessingStrategy;
@@ -31,7 +31,6 @@ import org.junit.Ignore;
 
 @Feature(PROCESSING_STRATEGIES)
 @Story(WORK_QUEUE)
-@Ignore("MULE-13478")
 public class TransactionAwareWorkQueueStreamProcessingStrategyTestCase extends WorkQueueStreamProcessingStrategyTestCase {
 
   public TransactionAwareWorkQueueStreamProcessingStrategyTestCase(Mode mode) {
